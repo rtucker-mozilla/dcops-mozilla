@@ -1,0 +1,60 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load ifsetting_tag %}
+
+{% block head_title %}{% trans title  %}{% endblock %}
+{% block extra_head %}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/jquery.fullcalendar.css">
+<link rel="stylesheet" href="{{ STATIC_URL }}css/smoothness/jquery-ui-1.8.18.custom.css">
+<style type='text/css'>
+tbody, tr, td, th, table{
+    border: none;
+    border: 0px solid #FFF;
+    border-bottom: none;
+    border-top: none;
+}
+</style>
+<script type='text/javascript' src="{{ STATIC_URL }}js/jquery.fullcalendar.min.js"></script>
+  <script type="text/javascript">
+jQuery(document).ready(function ($) {
+    
+        var date = new Date();
+        var d = date.getDate();
+        var m = date.getMonth();
+        var y = date.getFullYear();
+        
+        $('#calendar').fullCalendar({
+            theme: true,
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: ''                                 
+                //right: 'month,agendaWeek,agendaDay'
+            },
+            editable: false,
+            events: {{ events|safe }}
+        });
+});
+function parse_date(string) {  
+    var date = new Date();  
+    var parts = String(string).split(/[- :]/);  
+  
+    date.setFullYear(parts[0]);  
+    date.setMonth(parts[1] - 1);  
+    date.setDate(parts[2]);  
+    /*date.setHours(parts[3]);  
+    date.setMinutes(parts[4]);  
+    date.setSeconds(parts[5]);  
+    date.setMilliseconds(0);  */
+  
+    return date;  
+}
+
+</script>
+{% endblock %}
+
+{% block body %}
+    <h1 style='border: none;' >{% trans title  %}</h1>
+    <div style='border: none; border-top: none;' id='calendar'></div>
+{% endblock %}

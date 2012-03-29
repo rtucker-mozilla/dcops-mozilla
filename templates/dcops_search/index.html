@@ -1,0 +1,84 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load ifsetting_tag %}
+
+{% block head_title %}{% trans "Search Results" %}{% endblock %}
+
+{% block body %}
+<form  action="{% url dcops_search_index %}" method="POST" name="WorkLogForm" id="WorkLogForm">
+<h1>{% trans "Search" %}</h1>
+<table>
+  {{ form }}
+
+  {% csrf_token %}
+  </td></tr>
+  <tr>
+      <td>
+      <input type="submit" value="{% trans "Search" %}"/>
+      </td>
+      <td>&nbsp;</td>
+  </tr>
+</table>
+    {% if work_log_list %}
+    <h1>{% trans "Work Log Search Results" %}</h1>
+    <table>
+    <tr>
+        <th>Task</th>
+        <th>Blocks</th>
+        <th>Depends On</th>
+        <th>Location</th>
+        <th>Priority</th>
+        <th>Created</th>
+        <th>Expected Completion</th>
+    </tr>
+        {% for item in work_log_list %}
+        <tr>
+            <td><a href="{% url work_log_edit item.id %}">{{ item.name }}</a></td>
+            <td>
+                {% for depend in item.get_blocks %}
+                <a href='{% url work_log_edit depend %}'>{{ depend }}</a>
+                {% endfor %}
+            </td>
+            <td>
+                {% for depend in item.get_depends %}
+                    <a href='{% url work_log_edit depend %}'>{{ depend }}</a>
+                {% endfor %}
+            </td>
+            <td>{{ item.dc }}</td>
+            <td style='background-color: {{ item.priority.color }};' >{{ item.priority }}</td>
+            <td>{{ item.created_on }}</td>
+            <td>{{ item.expected_completion_date }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+        <h1>{% trans "No Work Log Entries Found" %}</h1>
+    {% endif %}
+    {% if shipment_log_list %}
+    <h1>{% trans "Shipment Search Results" %}</h1>
+        <table>
+        <tr>
+            <th>Shipment</th>
+            <th>Ship Date</th>
+            <th>Arrival Date</th>
+            <th>Data Center</th>
+            <th>Tracking</th>
+            <th>Delivered</th>
+
+        </tr>
+        {% for item in shipment_log_list %}
+        <tr>
+            <td><a href="{% url dcops_shipping_edit item.id %}">{{ item.name }}</a></td>
+            <td>{{ item.ship_date }}</td>
+            <td>{{ item.arrival_date }}</td>
+            <td>{{ item.data_center }}</td>
+            <td><a href="{{ item.shipper.url}}{{ item.tracking_number }}" target="_blank">{{ item.tracking_number }}</a></td>
+            <td>{{ item.delivered }}</td>
+        </tr>
+        {% endfor %}
+        {% else %}
+            <h1>{% trans "No Shipment Entries Found" %}</h1>
+    {% endif %}
+</table>
+{% endblock %}

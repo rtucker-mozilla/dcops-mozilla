@@ -1,0 +1,41 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load ifsetting_tag %}
+
+{% block head_title %}{% trans "Current Work Log" %}{% endblock %}
+
+{% block body %}
+    <h1>{% trans "Current Work Log" %}</h1>
+    <table>
+    <tr><th colspan='6'><a href="{% url work_log_create %}">Create New Entry</a></th></tr>
+    <tr>
+        <th>Task</th>
+        <th>Blocks</th>
+        <th>Depends On</th>
+        <th>Location</th>
+        <th>Priority</th>
+        <th>Created</th>
+        <th>Expected Completion</th>
+    </tr>
+    {% for item in list %}
+    <tr>
+        <td><a href="{% url work_log_edit item.id %}">{{ item.name }}</a></td>
+        <td>
+            {% for depend in item.get_blocks %}
+            <a href='{% url work_log_edit depend %}'>{{ depend }}</a>
+            {% endfor %}
+        </td>
+        <td>
+            {% for depend in item.get_depends %}
+                <a href='{% url work_log_edit depend %}'>{{ depend }}</a>
+            {% endfor %}
+        </td>
+        <td>{{ item.dc }}</td>
+        <td style='background-color: {{ item.priority.color }};' >{{ item.priority }}</td>
+        <td>{{ item.created_on }}</td>
+        <td>{{ item.expected_completion_date }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

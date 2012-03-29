@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+    <head>
+        <meta charset="utf-8" />
+        <title>{% block head_title_base %}dcops.mozilla.com : {% if SITE_NAME2 %}{{ SITE_NAME }} : {% endif %}{% block head_title %}{% endblock %}{% endblock %}</title>
+        <!-- HTML5 shim, for IE6-8 support of HTML elements -->
+        <!--[if lt IE 9]>
+            <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+        <link rel="shortcut icon" href="{{ STATIC_URL }}img/favicon.ico" />
+        <link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap.min.css">
+        <link rel="stylesheet" href="{{ STATIC_URL }}css/extra.css">
+        <link rel="stylesheet" href="{{ STATIC_URL }}css/custom.css">
+        <style type='text/css'>
+            ul.errorlist li {
+                color: red;
+            }
+        </style>
+        <script src="{{ STATIC_URL }}js/jquery-1.7.min.js"></script>
+        <script src="{{ STATIC_URL }}js/jquery.form.js"></script>
+        <script src="{{ STATIC_URL }}js/bootstrap-alerts.js"></script>
+        <script src="{{ STATIC_URL }}js/bootstrap-twipsy.js"></script>
+        <script src="{{ STATIC_URL }}js/bootstrap-popover.js"></script>
+        <script src="{{ STATIC_URL }}js/bootstrap-dropdown.js"></script>
+        <script src="{{ STATIC_URL }}js/bootstrap-tabs.js"></script>
+        <script src="{{ STATIC_URL }}js/bootstrap-scrollspy.js"></script>
+        <script src="{{ STATIC_URL }}js/bootstrap-buttons.js"></script>
+        <script src="{{ STATIC_URL }}js/theme.js"></script>
+        <script src="{{ STATIC_URL }}js/pinax.modal.js"></script>
+        {% block extra_head_base %}
+            {% block extra_head %}{% endblock %}
+        {% endblock %}
+    </head>
+    <body class="{% block body_class %}{% endblock %}" id="{% block body_id %}{% endblock %}">
+        
+        {% block topbar_base %}
+            <div class="topbar">
+                <div class="fill">
+                    <div class="container">
+                        {% block topbar %}
+                            <!--<h3><a href="{% url home %}">{{ SITE_NAME }}</a></h3>-->
+                            <h3><a href="{% url home %}">dcops.mozilla.com</a></h3>
+                            {% block nav %}
+                            {% if request.user.is_authenticated %}
+                            <ul>
+                                <li><a href="/work_log/" class="menu">Work Log</a>
+                                    <ul class="menu-dropdown">
+                                        <li><a href="{% url work_log_create %}">Create</a></li>
+                                        <li><a href="{% url work_log_index %}">All</a></li>
+                                        <li><a href="{% url work_log_mine %}">Mine</a></li>
+                                        <li><a href="{% url work_log_unassigned %}">Unassigned</a></li>
+                                        {% for d in data_centers %}
+                                        <li><a href='{% url work_log_data_center d.id %}'>{{ d }}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                                <li><a href="/shipping/">Shipment Tracking</a></li>
+                                <li><a href="/calendar/" class="menu">Calendar</a>
+                                    <ul class="menu-dropdown">
+                                        <li><a href="{% url dcops_calendar_expected_start %}">Expected Start</a></li>
+                                        <li><a href="{% url dcops_calendar_expected_completion %}">Expected Completion</a></li>
+                                        <li><a href="{% url dcops_calendar_shipping %}">Shipping</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <form action="{% url dcops_search_index %}" method="get">
+                                <input type="text" name='search_term' placeholder="Search" />
+                            </form>
+                            {% endif %}
+                            {% endblock %}
+                            {% block account_bar %}{% include "_account_bar.html" %}{% endblock %}
+                        {% endblock %}
+                    </div>
+                </div>
+            </div>
+        {% endblock %}
+        
+        {% block body_base %}
+            <div class="container">
+                {% include "_messages.html" %}
+                {% block body %}
+                {% endblock %}
+            </div>
+        {% endblock %}
+        
+        {% block footer_base %}
+            <div id="footer">
+                <div class="inner">
+                    <div class="container">
+                        {% block footer %}{% endblock %}
+                    </div>
+                </div>
+            </div>
+        {% endblock %}
+        
+        {% block extra_body_base %}
+            {% block extra_body %}{% endblock %}
+        {% endblock %}
+    </body>
+</html>

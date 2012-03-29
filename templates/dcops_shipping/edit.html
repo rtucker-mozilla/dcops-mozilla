@@ -1,0 +1,73 @@
+{% extends "site_base.html" %}                                                                                                                                             
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Edit Shipment Event" %}{% endblock %}
+
+{% block body %}
+
+<h1>{% trans "Edit Shipment Event" %}</h1>
+<form  action="" method="POST" name="WorkLogForm" id="WorkLogForm">
+<table>
+  {{ form }}
+  {% csrf_token %}
+   <tr><th colspan='2'>{% trans "Associated Tasks" %}</th></tr>                                                                    
+  <tr><td colspan="3" style='border: none;'>
+  {% for formset in depends_form %}
+  <tr><td class='' >
+    {% if formset.errors %}
+    {{ formset.errors }}</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+    <tr><td style='border-top: none;'>
+    {% endif %}
+    {% for f in formset.visible_fields %}
+    {% if not f.hidden %}
+    <span class='formset_inputs'>{{ f.label_tag }}</span><span class="formset_inputs"> {{ f }}
+        {% for error in f.errors %}
+        {% endfor %}
+    </span>
+        {% if forloop.counter0|divisibleby:6 %}
+            {% if formset.errors %}
+                </td><td style="border-top: none;">
+            {% endif %}
+            {% if not formset.errors %}
+                </td><td>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+    {% endfor %}
+    {% for hidden in formset.hidden_fields %}
+        {{ hidden }}
+    {% endfor %}
+  {% endfor %}
+{{ depends_form.management_form }}
+  </td></tr>
+</td></tr>
+  <tr>
+      <td>
+          <input type='button' onclick="self.location='{% url work_log_index %}';" value="Cancel">&nbsp;
+      <input type="submit" value="{% trans "Edit" %}"/>
+      </td>
+      <td>&nbsp;</td>
+  </tr>
+</table>
+</form>
+    <p>{% endblock %}
+       {% block extra_body %}
+ <style type="text/css" media="all">@import "{{ STATIC_URL }}/css/smoothness/jquery-ui-1.8.18.custom.css";</style>
+ <script type="text/javascript" src ="{{ STATIC_URL }}/js/jquery-ui-1.8.18.custom.min.js"></script>
+ <script type="text/javascript">
+ jQuery(document).ready(function ($) {
+    $( "#id_ship_date" ).datepicker({
+        dateFormat: 'yy-mm-dd'
+    });
+    $( "#id_arrival_date" ).datepicker({
+        dateFormat: 'yy-mm-dd'
+    });
+    $( "#id_expected_arrival_date" ).datepicker({
+        dateFormat: 'yy-mm-dd'
+    });
+             
+ } );
+ </script>
+ {% endblock %}
+

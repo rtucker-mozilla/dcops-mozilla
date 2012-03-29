@@ -1,0 +1,32 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load ifsetting_tag %}
+
+{% block head_title %}{% trans "Current Shipment" %}{% endblock %}
+
+{% block body %}
+    <h1>{% trans "Current Shipment" %}</h1>
+    <table>
+    <tr><th colspan='6'><a href="{% url dcops_shipping_create %}">Create New Shipment</a></th></tr>
+    <tr>
+        <th>Shipment</th>
+        <th>Ship Date</th>
+        <th>Arrival Date</th>
+        <th>Data Center</th>
+        <th>Tracking</th>
+        <th>Delivered</th>
+
+    </tr>
+    {% for item in list %}
+    <tr>
+        <td><a href="{% url dcops_shipping_edit item.id %}">{{ item.name }}</a></td>
+        <td>{{ item.ship_date }}</td>
+        <td>{{ item.arrival_date }}</td>
+        <td>{{ item.data_center }}</td>
+        <td><a href="{{ item.shipper.url}}{{ item.tracking_number }}" target="_blank">{{ item.tracking_number }}</a></td>
+        <td>{{ item.delivered }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

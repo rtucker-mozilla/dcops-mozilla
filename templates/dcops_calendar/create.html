@@ -1,0 +1,42 @@
+{% extends "site_base.html" %}                                                                                                                                             
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Create Work Log Event" %}{% endblock %}
+
+{% block body %}
+
+<h1>{% trans "Create Work Log Event" %}</h1>
+<form  action="" method="POST" name="WorkLogForm" id="WorkLogForm">
+<table>
+  {{ form }}
+  {% csrf_token %}
+  <tr>
+      <td>&nbsp;</td>
+      <td>
+          <input type='button' onclick="self.location='{% url work_log_index %}';" value="Cancel">&nbsp;
+      <input type="submit" value="{% trans "Create" %}"/>
+      </td>
+  </tr>
+</table>
+</form>
+    <p>{% endblock %}
+       {% block extra_body %}
+ <style type="text/css" media="all">@import "{{ STATIC_URL }}/css/smoothness/jquery-ui-1.8.18.custom.css";</style>
+ <script type="text/javascript" src ="{{ STATIC_URL }}/js/jquery-ui-1.8.18.custom.min.js"></script>
+ <script type="text/javascript">
+ jQuery(document).ready(function ($) {
+    $( "#id_start_date" ).datepicker({
+        altFormat: 'yy-mm-dd'
+    });
+    $( "#id_completion_date" ).datepicker({
+        altFormat: 'yy-mm-dd'
+    });
+    $( "#id_expected_completion_date" ).datepicker({
+        altFormat: 'yy-mm-dd'
+    });
+             
+ } );
+ </script>
+ {% endblock %}
+
