@@ -1,6 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 from itertools import chain
+from django.core.files.storage import FileSystemStorage
+fs = FileSystemStorage(location="/var/www/dcops.mozilla.com/dcops/")
+import settings
 # Create your models here.
 class DependencyManager(models.Manager):
     
@@ -9,6 +12,20 @@ class DependencyManager(models.Manager):
 
     def blocks(self):
         return self.get_query_set().depends_set.filter(direction=2)
+class TrainSchedule(models.Model):
+    name = models.CharField(max_length=128, blank=False, null=False)
+    train_date = models.DateField(blank=True, null=True)
+    #file = models.FileField(storage=fs)
+    file = models.FileField(upload_to='train')
+
+    def __unicode__(self):
+        return "%s - %s" % (self.name, self.train_date)
+
+    def get_absolute_url(self):
+        return "%s%s" % (settings.MEDIA_URL, self.file)
+
+    def get_download_url(self):
+        return "%s%s" % (settings.MEDIA_URL, self.file)
 
 class WorkLog(models.Model):
     name = models.CharField(max_length=128, blank=False, null=False)

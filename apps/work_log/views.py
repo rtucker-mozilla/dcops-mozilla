@@ -25,6 +25,9 @@ def unassigned(request):
 def data_center(request, id):
     list = models.WorkLog.objects.filter(dc=id)
     return render_to_response('work_log/index.html', {'list':list}, RequestContext(request) )
+def train_schedule(request):
+    list = models.TrainSchedule.objects.all()
+    return render_to_response('work_log/train_schedule.html', {'list':list}, RequestContext(request) )
 @login_required
 def edit(request, id):
     instance = get_object_or_404(models.WorkLog, id=id)

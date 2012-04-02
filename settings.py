@@ -10,7 +10,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 # tells Pinax to serve media through the staticfiles app.
-SERVE_MEDIA = DEBUG
+SERVE_MEDIA = True
 
 # django-compressor is turned off by default due to deployment overhead for
 # most users. See <URL> for more information
