@@ -18,3 +18,7 @@ tmp/*
 *.mo
 dev.db
 *.pyc
+<<<<<<< HEAD
+=======
+site_media/media/*
+>>>>>>> origin/master

@@ -23,3 +23,8 @@ python-openid==2.2.5
 metron==0.1
 
 pinax-theme-bootstrap==0.1.2
+<<<<<<< HEAD
+=======
+South
+MySQL-python
+>>>>>>> origin/master

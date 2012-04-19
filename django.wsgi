@@ -1,7 +1,12 @@
 """
     This needs set to the absolute path for the virtualenv
 """
+<<<<<<< HEAD
 VIRTUAL_ENV_ROOT = '/var/www/dcops.mozilla.com/dcops'
+=======
+import os
+VIRTUAL_ENV_ROOT = os.path.abspath(os.path.dirname(__file__))
+>>>>>>> origin/master
 ALLDIRS = ['%s/lib/python2.6/site-packages' % (VIRTUAL_ENV_ROOT),]
 
 import os
