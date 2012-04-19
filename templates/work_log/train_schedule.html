@@ -1,0 +1,24 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load ifsetting_tag %}
+
+{% block head_title %}{% trans "Train Schedules" %}{% endblock %}
+
+{% block body %}
+    <h1>{% trans "Train Schedules" %}</h1>
+    <table>
+    <tr>
+        <th>Train</th>
+        <th>Date</th>
+        <th>Spreadsheet</th>
+    </tr>
+    {% for item in list %}
+    <tr>
+        <td>{{ item.name }}</td>
+        <td>{{ item.train_date }}</td>
+        <td><a href="{{ item.get_absolute_url|safe }}">Download</a></td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
