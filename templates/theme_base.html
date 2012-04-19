@@ -41,32 +41,32 @@
                             <!--<h3><a href="{% url home %}">{{ SITE_NAME }}</a></h3>-->
                             <h3><a href="{% url home %}">dcops.mozilla.com</a></h3>
                             {% block nav %}
-                            {% if request.user.is_authenticated %}
-                            <ul>
-                                <li><a href="/work_log/" class="menu">Work Log</a>
-                                    <ul class="menu-dropdown">
-                                        <li><a href="{% url work_log_create %}">Create</a></li>
-                                        <li><a href="{% url work_log_index %}">All</a></li>
-                                        <li><a href="{% url work_log_mine %}">Mine</a></li>
-                                        <li><a href="{% url work_log_unassigned %}">Unassigned</a></li>
-                                        {% for d in data_centers %}
-                                        <li><a href='{% url work_log_data_center d.id %}'>{{ d }}</a></li>
-                                        {% endfor %}
+                                    {% if request.user.is_staff %}
+                                        <ul>
+                                        <li><a href="/work_log/" class="menu">Work Log</a>
+                                            <ul class="menu-dropdown">
+                                                <li><a href="{% url work_log_create %}">Create</a></li>
+                                                <li><a href="{% url work_log_index %}">All</a></li>
+                                                <li><a href="{% url work_log_mine %}">Mine</a></li>
+                                                <li><a href="{% url work_log_unassigned %}">Unassigned</a></li>
+                                                {% for d in data_centers %}
+                                                <li><a href='{% url work_log_data_center d.id %}'>{{ d }}</a></li>
+                                                {% endfor %}
+                                            </ul>
+                                        </li>
+                                        <li><a href="/shipping/">Shipment Tracking</a></li>
+                                        <li><a href="/calendar/" class="menu">Calendar</a>
+                                            <ul class="menu-dropdown">
+                                                <li><a href="{% url dcops_calendar_expected_start %}">Expected Start</a></li>
+                                                <li><a href="{% url dcops_calendar_expected_completion %}">Expected Completion</a></li>
+                                                <li><a href="{% url dcops_calendar_shipping %}">Shipping</a></li>
+                                            </ul>
+                                        </li>
                                     </ul>
-                                </li>
-                                <li><a href="/shipping/">Shipment Tracking</a></li>
-                                <li><a href="/calendar/" class="menu">Calendar</a>
-                                    <ul class="menu-dropdown">
-                                        <li><a href="{% url dcops_calendar_expected_start %}">Expected Start</a></li>
-                                        <li><a href="{% url dcops_calendar_expected_completion %}">Expected Completion</a></li>
-                                        <li><a href="{% url dcops_calendar_shipping %}">Shipping</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                            <form action="{% url dcops_search_index %}" method="get">
-                                <input type="text" name='search_term' placeholder="Search" />
-                            </form>
-                            {% endif %}
+                                    <form action="{% url dcops_search_index %}" method="get">
+                                        <input type="text" name='search_term' placeholder="Search" />
+                                    </form>
+                                {% endif %}
                             {% endblock %}
                             {% block account_bar %}{% include "_account_bar.html" %}{% endblock %}
                         {% endblock %}
