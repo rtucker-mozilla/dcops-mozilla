@@ -5,11 +5,10 @@ from django.template import RequestContext
 import models, forms
 from dcops.apps.work_log.models import WorkLog
 from dcops.apps.dcops_shipping.models import Shipment
-from django.contrib.auth.decorators import staff_required
 from django.core.urlresolvers import reverse
 import logging
 from django.db.models import Q
-from decorators import staff_required
+from custom_decorators.decorators import staff_required
 
 @staff_required
 def index(request):

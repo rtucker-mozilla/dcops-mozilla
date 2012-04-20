@@ -1,11 +1,9 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, redirect, get_object_or_404
 from django.template import RequestContext
-from django.contrib.auth.decorators import staff_required
 from django.core.urlresolvers import reverse
 import forms, models
-from decorators import staff_required
-
+from dcops.custom_decorators.decorators import staff_required
 @staff_required
 def index(request):
     list = models.Shipment.objects.all()

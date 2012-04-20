@@ -1,14 +1,13 @@
 # Create your views here.
 from work_log.models import WorkLog
 from dcops_shipping.models import Shipment
-from django.contrib.auth.decorators import staff_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, redirect, get_object_or_404
 from django.template import RequestContext
 import logging
 from django.core.urlresolvers import reverse
 from django.db.models import Count
-from decorators import staff_required
+from custom_decorators.decorators import staff_required
 
 @staff_required
 def expected_start(request, instance=None):

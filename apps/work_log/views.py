@@ -5,14 +5,13 @@ from django.template import RequestContext
 import models, forms
 from django.core.urlresolvers import reverse
 import logging
-from decorators import staff_required
+from django.contrib.auth.decorators import login_required
+from dcops.custom_decorators.decorators import staff_required
 
 
-
-@staff_required
 def index(request):
     if not request.user.is_staff:
-        return HttpResponseRedirect(reverse('work_log_train_schedule'))
+        return train_schedule(request)
     list = models.WorkLog.objects.all()
     return render_to_response('work_log/index.html', {'list':list}, RequestContext(request) )
 
@@ -30,12 +29,12 @@ def unassigned(request):
 def data_center(request, id):
     list = models.WorkLog.objects.filter(dc=id)
     return render_to_response('work_log/index.html', {'list':list}, RequestContext(request) )
-    """
-        This is the only public non staff view. All others should use the staff_required decorator
-    """
+
+@login_required
 def train_schedule(request):
     list = models.TrainSchedule.objects.all()
     return render_to_response('work_log/train_schedule.html', {'list':list}, RequestContext(request) )
+
 @staff_required
 def edit(request, id):
     instance = get_object_or_404(models.WorkLog, id=id)
