@@ -1,30 +1,32 @@
 # Create your views here.
 from work_log.models import WorkLog
 from dcops_shipping.models import Shipment
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import staff_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, redirect, get_object_or_404
 from django.template import RequestContext
 import logging
 from django.core.urlresolvers import reverse
 from django.db.models import Count
-@login_required
+from decorators import staff_required
+
+@staff_required
 def expected_start(request, instance=None):
     pass
 
-@login_required
+@staff_required
 def expected_completion(request, instance=None):
     events = WorkLog.objects.all()
     out_string = get_event_string(events, 'expected_completion_date')
     return render_to_response('dcops_calendar/index.html', {'title': 'Expected Completion Calendar', 'events':out_string, }, context_instance=RequestContext(request))
 
-@login_required
+@staff_required
 def expected_start(request, instance=None):
     events = WorkLog.objects.all()
     out_string = get_event_string(events, 'start_date')
     return render_to_response('dcops_calendar/index.html', {'title': 'Expected Start Date Calendar', 'events':out_string, }, context_instance=RequestContext(request))
 
-@login_required
+@staff_required
 def shipping(request, instance=None):
     events = Shipment.objects.all().group_by('arrival_date', 'data_center')
     logging.info(events)

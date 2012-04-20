@@ -3,32 +3,40 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, redirect, get_object_or_404
 from django.template import RequestContext
 import models, forms
-from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 import logging
+from decorators import staff_required
 
 
-@login_required
+
+@staff_required
 def index(request):
+    if not request.user.is_staff:
+        return HttpResponseRedirect(reverse('work_log_train_schedule'))
     list = models.WorkLog.objects.all()
     return render_to_response('work_log/index.html', {'list':list}, RequestContext(request) )
 
-@login_required
+@staff_required
 def mine(request):
     list = models.WorkLog.objects.filter(assigned_to=request.user)
+
     return render_to_response('work_log/index.html', {'list':list}, RequestContext(request) )
-@login_required
+@staff_required
 def unassigned(request):
     list = models.WorkLog.objects.filter(assigned_to=None)
     return render_to_response('work_log/index.html', {'list':list}, RequestContext(request) )
-@login_required
+
+@staff_required
 def data_center(request, id):
     list = models.WorkLog.objects.filter(dc=id)
     return render_to_response('work_log/index.html', {'list':list}, RequestContext(request) )
+    """
+        This is the only public non staff view. All others should use the staff_required decorator
+    """
 def train_schedule(request):
     list = models.TrainSchedule.objects.all()
     return render_to_response('work_log/train_schedule.html', {'list':list}, RequestContext(request) )
-@login_required
+@staff_required
 def edit(request, id):
     instance = get_object_or_404(models.WorkLog, id=id)
     if request.method == "POST":
@@ -56,7 +64,7 @@ def edit(request, id):
 
     return render_to_response('work_log/edit.html', {'form':form, 'depends_form':depends_form}, context_instance=RequestContext(request) )
 
-@login_required
+@staff_required
 def create(request):
     if request.method == "POST":
         form = forms.WorkLogForm(request.POST)                                                                                                                                          

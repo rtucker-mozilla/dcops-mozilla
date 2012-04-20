@@ -5,13 +5,13 @@ from django.template import RequestContext
 import models, forms
 from dcops.apps.work_log.models import WorkLog
 from dcops.apps.dcops_shipping.models import Shipment
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import staff_required
 from django.core.urlresolvers import reverse
 import logging
 from django.db.models import Q
+from decorators import staff_required
 
-
-@login_required
+@staff_required
 def index(request):
     """
         We're using a request method of get with the top search bar. Display both sets of records for it

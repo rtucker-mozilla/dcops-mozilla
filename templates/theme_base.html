@@ -66,6 +66,10 @@
                                     <form action="{% url dcops_search_index %}" method="get">
                                         <input type="text" name='search_term' placeholder="Search" />
                                     </form>
+                                {% else %}
+                                    <ul>
+                                        <li><a href="/work_log/train_schedule/">Train Schedule</a></li>
+                                    </ul>
                                 {% endif %}
                             {% endblock %}
                             {% block account_bar %}{% include "_account_bar.html" %}{% endblock %}

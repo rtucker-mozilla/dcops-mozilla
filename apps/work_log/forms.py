@@ -18,7 +18,9 @@ DEPENDS_CHOICES = (
 class CustomBaseInlineFormset(BaseInlineFormSet):
     def __init__(self, *args, **kwargs):
         super(CustomBaseInlineFormset, self).__init__(*args, **kwargs)
-        id = kwargs['instance'].id
+        instance = kwargs.pop('instance', None)
+        if instance:
+            id = instance.id
         other_queryset = models.Depends.objects.filter(issue_id=id)
         self.queryset = list(chain(self.queryset, other_queryset))
         self.queryset = None
@@ -30,5 +32,5 @@ class CustomBaseInlineFormset(BaseInlineFormSet):
 DependsFormset = inlineformset_factory(models.WorkLog, 
     models.Depends, 
     can_delete=True,
-    formset=CustomBaseInlineFormset,
+    #formset=CustomBaseInlineFormset,
     extra=3)

@@ -1,16 +1,17 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, redirect, get_object_or_404
 from django.template import RequestContext
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import staff_required
 from django.core.urlresolvers import reverse
 import forms, models
+from decorators import staff_required
 
-@login_required
+@staff_required
 def index(request):
     list = models.Shipment.objects.all()
     return render_to_response('dcops_shipping/index.html', {'list':list}, RequestContext(request) )
 
-@login_required
+@staff_required
 def edit(request, id):
     instance = get_object_or_404(models.Shipment, id=id)
     if request.method == "POST":
@@ -32,7 +33,7 @@ def edit(request, id):
     return render_to_response('dcops_shipping/edit.html', {'form':form, 'depends_form':depends_form}, context_instance=RequestContext(request) )
 
 
-@login_required
+@staff_required
 def create(request):
     if request.method == "POST":
         form = forms.ShipmentForm(request.POST)
