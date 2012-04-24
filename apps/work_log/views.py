@@ -32,7 +32,7 @@ def data_center(request, id):
 
 @login_required
 def train_schedule(request):
-    list = models.TrainSchedule.objects.all()
+    list = models.TrainSchedule.objects.all().order_by('-train_date')
     return render_to_response('work_log/train_schedule.html', {'list':list}, RequestContext(request) )
 
 @staff_required
