@@ -49,6 +49,7 @@
                                                 <li><a href="{% url work_log_index %}">All</a></li>
                                                 <li><a href="{% url work_log_mine %}">Mine</a></li>
                                                 <li><a href="{% url work_log_unassigned %}">Unassigned</a></li>
+                                                <li><a href="{% url work_log_train_schedule %}">Train Schedule</a></li>
                                                 {% for d in data_centers %}
                                                 <li><a href='{% url work_log_data_center d.id %}'>{{ d }}</a></li>
                                                 {% endfor %}
