@@ -27,10 +27,20 @@ def expected_start(request, instance=None):
 
 @staff_required
 def shipping(request, instance=None):
-    events = Shipment.objects.all().group_by('arrival_date', 'data_center')
-    logging.info(events)
+    from django.db import connection, transaction
+    cursor = connection.cursor()
+    transaction.commit_unless_managed()
+    cursor.execute("select work_log_datacenter.name, work_log_datacenter.color, expected_arrival_date, count(data_center_id) as package_count from dcops_shipping_shipment INNER JOIN work_log_datacenter ON (work_log_datacenter.id = dcops_shipping_shipment.data_center_id) GROUP BY expected_arrival_date, data_center_id")
+    desc = cursor.description
+    events = [
+        dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+             ]
 
-    out_string = get_event_string(events, 'shipping')
+    if events:
+        out_string = get_event_string(events, 'shipping')
+    else:
+        out_string = []
     return render_to_response('dcops_calendar/index.html', {'title': 'Shipping Calendar', 'events':out_string, }, context_instance=RequestContext(request))
 
 def get_event_string(events, type):
@@ -54,11 +64,11 @@ def get_event_string(events, type):
                 })
         elif type == 'shipping':
             out_events.append({
-                'title': events['data_center__count'],
-                'id': 'sadf',
-                'color': 'blue',
-                'start': 'parse_date("%s")' % (str(event.arrival_date)),
-                'end': 'parse_date("%s")' % (str(event.arrival_date)),
+                'title': "%s - %i " % (event['name'], int(event['package_count'])),
+                'id': '1',
+                'color': event['color'],
+                'start': 'parse_date("%s")' % (str(event['expected_arrival_date'])),
+                'end': 'parse_date("%s")' % (str(event['expected_arrival_date'])),
                 })
         event_count = len(out_events)
         counter = 0
